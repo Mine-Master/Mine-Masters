@@ -28,7 +28,7 @@ contract CryptoniteToken is ERC20, Ownable {
         address _teamAddress,
         address _treasuryAddress,
         address _yieldFarmingAddress
-    ) ERC20("Cryptonite", "CRT") {
+    ) ERC20("Cryptonite", "CRT") Ownable(msg.sender) {
         liquidityAddress = _liquidityAddress;
         teamAddress = _teamAddress;
         treasuryAddress = _treasuryAddress;
@@ -47,7 +47,7 @@ contract CryptoniteToken is ERC20, Ownable {
     ) public virtual override returns (bool) {
         uint256 burnAmount = (amount * burnRate) / 100;
         uint256 sendAmount = amount - burnAmount;
-        _burn(_msgSender(), burnAmount);
+        super._burn(_msgSender(), burnAmount);
         emit TokensBurned(_msgSender(), burnAmount);
         return super.transfer(recipient, sendAmount);
     }
@@ -59,7 +59,7 @@ contract CryptoniteToken is ERC20, Ownable {
     ) public virtual override returns (bool) {
         uint256 burnAmount = (amount * burnRate) / 100;
         uint256 sendAmount = amount - burnAmount;
-        _burn(sender, burnAmount);
+        super._burn(sender, burnAmount);
         emit TokensBurned(sender, burnAmount);
         return super.transferFrom(sender, recipient, sendAmount);
     }
