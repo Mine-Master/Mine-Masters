@@ -28,7 +28,15 @@ contract CryptoniteToken is ERC20, Ownable {
         address _teamAddress,
         address _treasuryAddress,
         address _yieldFarmingAddress
-    ) ERC20("Cryptonite", "CRT") Ownable(msg.sender) {
+    ) ERC20("Cryptonite", "CRT") Ownable(_msgSender()) {
+        require(_liquidityAddress != address(0), "Invalid liquidity address");
+        require(_teamAddress != address(0), "Invalid team address");
+        require(_treasuryAddress != address(0), "Invalid treasury address");
+        require(
+            _yieldFarmingAddress != address(0),
+            "Invalid yield farming address"
+        );
+
         liquidityAddress = _liquidityAddress;
         teamAddress = _teamAddress;
         treasuryAddress = _treasuryAddress;
@@ -38,7 +46,7 @@ contract CryptoniteToken is ERC20, Ownable {
         _mint(teamAddress, TEAM_ALLOCATION);
         _mint(treasuryAddress, TREASURY_ALLOCATION);
         _mint(yieldFarmingAddress, YIELD_FARMING_ALLOCATION);
-        _mint(msg.sender, IN_GAME_REWARDS_ALLOCATION);
+        _mint(_msgSender(), IN_GAME_REWARDS_ALLOCATION);
     }
 
     function transfer(
